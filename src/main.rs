@@ -5,5 +5,8 @@ mod helpers;
 mod day01_historian_hysteria;
 
 fn main() {
-	println!("Total distance is {}", day01_historian_hysteria::solve_1());
+	println!(
+		"The similarity score: {}",
+		day01_historian_hysteria::solve_2()
+	)
 }

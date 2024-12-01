@@ -1,4 +1,4 @@
-use std::iter;
+use std::{collections::HashMap, iter};
 
 use crate::helpers;
 
@@ -10,6 +10,29 @@ fn total_distance(left: &[u32], right: &[u32]) -> u32 {
 	iter::zip(left, right).map(|(&a, &b)| distance(a, b)).sum()
 }
 
+/// Count how often a given element appears in a list.
+fn count_occurances(list: &[u32], elem: u32) -> u32 {
+	list
+		.iter()
+		.filter(|&&e| e == elem)
+		.count()
+		.try_into()
+		.unwrap()
+}
+
+/// Calculate the "similarity score" between both lists
+fn calculate_similarity_score(left: &[u32], right: &[u32]) -> u32 {
+	let mut cache = HashMap::new();
+	left
+		.iter()
+		.map(|num| {
+			num * *cache
+				.entry(num)
+				.or_insert_with(|| count_occurances(right, *num))
+		})
+		.sum()
+}
+
 pub fn solve_1() -> u32 {
 	let input = helpers::read_input("inputs/day01/input.txt").unwrap();
 	let (mut left, mut right) = helpers::split_left_right(input);
@@ -18,12 +41,21 @@ pub fn solve_1() -> u32 {
 	total_distance(&left, &right)
 }
 
+pub fn solve_2() -> u32 {
+	let input = helpers::read_input("inputs/day01/input.txt").unwrap();
+	let (left, right) = helpers::split_left_right(input);
+	calculate_similarity_score(&left, &right)
+}
+
 #[cfg(test)]
 mod tests {
-	use crate::{day01_historian_hysteria::total_distance, helpers};
+	use crate::{
+		day01_historian_hysteria::{calculate_similarity_score, total_distance},
+		helpers,
+	};
 
 	#[test]
-	pub fn ex01() {
+	fn ex01() {
 		let input = helpers::read_input("inputs/day01/ex01.txt").unwrap();
 		let (mut left, mut right) = helpers::split_left_right(input);
 		left.sort();
@@ -31,5 +63,12 @@ mod tests {
 		assert_eq!(Some(&1), left.first());
 		assert_eq!(Some(&3), right.first());
 		assert_eq!(11, total_distance(&left, &right));
+	}
+
+	#[test]
+	fn ex02() {
+		let input = helpers::read_input("inputs/day01/ex01.txt").unwrap();
+		let (left, right) = helpers::split_left_right(input);
+		assert_eq!(31, calculate_similarity_score(&left, &right));
 	}
 }
