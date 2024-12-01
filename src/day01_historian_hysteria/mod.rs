@@ -11,7 +11,7 @@ fn total_distance(left: &[u32], right: &[u32]) -> u32 {
 }
 
 /// Count how often a given element appears in a list.
-fn count_occurances(list: &[u32], elem: u32) -> u32 {
+fn count_occurrences(list: &[u32], elem: u32) -> u32 {
 	list
 		.iter()
 		.filter(|&&e| e == elem)
@@ -28,11 +28,12 @@ fn calculate_similarity_score(left: &[u32], right: &[u32]) -> u32 {
 		.map(|num| {
 			num * *cache
 				.entry(num)
-				.or_insert_with(|| count_occurances(right, *num))
+				.or_insert_with(|| count_occurrences(right, *num))
 		})
 		.sum()
 }
 
+#[allow(dead_code)]
 pub fn solve_1() -> u32 {
 	let input = helpers::read_input("inputs/day01/input.txt").unwrap();
 	let (mut left, mut right) = helpers::split_left_right(input);
@@ -41,6 +42,7 @@ pub fn solve_1() -> u32 {
 	total_distance(&left, &right)
 }
 
+#[allow(dead_code)]
 pub fn solve_2() -> u32 {
 	let input = helpers::read_input("inputs/day01/input.txt").unwrap();
 	let (left, right) = helpers::split_left_right(input);
