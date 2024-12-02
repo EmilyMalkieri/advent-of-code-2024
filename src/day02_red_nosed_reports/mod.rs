@@ -5,12 +5,14 @@ use crate::helpers;
 mod report;
 mod trend;
 
+#[allow(dead_code)]
 pub fn solve_1() -> usize {
 	let reports: Vec<Report> =
 		helpers::read_and_parse_each_lines_nums_into("inputs/day02/input.txt");
 	reports.iter().filter(|r| r.is_safe()).count()
 }
 
+#[allow(dead_code)]
 pub fn solve_2() -> usize {
 	let reports: Vec<Report> =
 		helpers::read_and_parse_each_lines_nums_into("inputs/day02/input.txt");
