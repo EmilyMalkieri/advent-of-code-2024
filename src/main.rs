@@ -3,10 +3,11 @@
 mod helpers;
 
 mod day01_historian_hysteria;
+mod day02_red_nosed_reports;
 
 fn main() {
 	println!(
-		"The similarity score: {}",
-		day01_historian_hysteria::solve_2()
+		"{} of the reports are safe.",
+		day02_red_nosed_reports::solve_1()
 	)
 }
