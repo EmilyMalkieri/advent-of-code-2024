@@ -53,4 +53,29 @@ impl Report {
 			&& self.min_step_size >= Some(1)
 			&& self.max_step_size <= Some(3)
 	}
+
+	pub fn is_safe_with_dampener(&self) -> bool {
+		if self.is_safe() {
+			return true;
+		}
+
+		(0..self.levels.len()).any(|skipped_idx| {
+			Report::from(
+				self
+					.levels
+					.iter()
+					.enumerate()
+					.filter_map(|(idx, elem)| {
+						if idx == skipped_idx {
+							None
+						} else {
+							Some(*elem)
+						}
+					})
+					.collect::<Vec<_>>()
+					.as_slice(),
+			)
+			.is_safe()
+		})
+	}
 }
