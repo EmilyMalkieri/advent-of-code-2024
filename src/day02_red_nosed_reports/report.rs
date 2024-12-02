@@ -51,22 +51,9 @@ impl Report {
 		}
 
 		(0..self.levels.len()).any(|skipped_idx| {
-			Report::from(
-				self
-					.levels
-					.iter()
-					.enumerate()
-					.filter_map(|(idx, elem)| {
-						if idx == skipped_idx {
-							None
-						} else {
-							Some(*elem)
-						}
-					})
-					.collect::<Vec<_>>()
-					.as_slice(),
-			)
-			.is_safe()
+			let mut levels = self.levels.to_owned();
+			levels.remove(skipped_idx);
+			Report::from(levels.as_slice()).is_safe()
 		})
 	}
 }
