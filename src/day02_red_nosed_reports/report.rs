@@ -1,5 +1,3 @@
-use std::cmp::Ordering;
-
 use super::trend::Trend;
 
 #[derive(Debug)]
@@ -12,7 +10,7 @@ pub struct Report {
 
 impl From<&[u32]> for Report {
 	fn from(value: &[u32]) -> Self {
-		let mut trend = None;
+		let mut trend: Option<Trend> = None;
 		let mut min_step_size = None;
 		let mut max_step_size = None;
 		for comp in value.windows(2) {
@@ -23,18 +21,11 @@ impl From<&[u32]> for Report {
 			if max_step_size.is_none_or(|prev| prev < current_step) {
 				max_step_size = Some(current_step);
 			}
-			trend = Some(match (trend, comp[0].cmp(&comp[1])) {
-				(None, Ordering::Less) => Trend::StrictlyDecreasing,
-				(None, Ordering::Equal) => Trend::Flat,
-				(None, Ordering::Greater) => Trend::StrictlyIncreasing,
-				(Some(Trend::StrictlyIncreasing), Ordering::Greater) => Trend::StrictlyIncreasing,
-				(Some(Trend::StrictlyIncreasing), _) => Trend::Mixed,
-				(Some(Trend::StrictlyDecreasing), Ordering::Less) => Trend::StrictlyDecreasing,
-				(Some(Trend::StrictlyDecreasing), _) => Trend::Mixed,
-				(Some(Trend::Flat), Ordering::Equal) => Trend::Flat,
-				(Some(Trend::Flat), _) => Trend::Mixed,
-				(Some(Trend::Mixed), _) => Trend::Mixed,
-			})
+			let direction = comp[0].cmp(&comp[1]);
+			trend = trend.map_or_else(
+				|| Some(Trend::from(direction)),
+				|current| Some(current.adjust(direction)),
+			);
 		}
 
 		Report {
