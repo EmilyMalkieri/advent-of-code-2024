@@ -8,7 +8,7 @@ mod day03_mull_it_over;
 
 fn main() {
 	println!(
-		"All the multiplications add up to {}.",
-		day03_mull_it_over::solve_1()
+		"All the enabled multiplications add up to {}.",
+		day03_mull_it_over::solve_2()
 	)
 }
