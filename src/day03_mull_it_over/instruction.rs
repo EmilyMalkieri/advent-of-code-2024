@@ -20,8 +20,8 @@ enum Parser {
 }
 
 static REGEX: LazyLock<Regex> = LazyLock::new(|| {
-	//cspell: disable-next-line
 	Regex::new(
+		//cspell: disable-next-line
 		r"(?<do>do)\(\)|(?<dont>don't)\(\)|(?<mul>mul)\((?<mul_a>\d{1,3}),(?<mul_b>\d{1,3})\)",
 	)
 	.expect("Unable to compile regex.")

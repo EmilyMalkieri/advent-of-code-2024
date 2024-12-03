@@ -1,11 +1,10 @@
 use regex;
 
 /// Parse numbers from a string
-pub fn into_unsigned_nums(input: &str) -> Vec<u32> {
+pub fn into_unsigned_nums(input: &str) -> impl Iterator<Item = u32> + use<'_> {
 	input
 		.split_whitespace()
 		.map(|s| u32::from_str_radix(s, 10).expect(&format!("Not a number: {}", s)))
-		.collect()
 }
 
 /// Parse our input into multiple instances of a type T as found by a regular expression.
