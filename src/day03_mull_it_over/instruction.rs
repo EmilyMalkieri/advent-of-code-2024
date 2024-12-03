@@ -2,6 +2,8 @@ use std::sync::LazyLock;
 
 use regex::Regex;
 
+use crate::helpers;
+
 #[derive(Debug, PartialEq, Eq)]
 #[allow(non_camel_case_types)]
 pub enum Instruction {
@@ -54,11 +56,9 @@ impl Instruction {
 			None
 		}
 	}
+
 	pub fn parse_many_naively(blob: &str) -> Vec<Self> {
-		REGEX
-			.captures_iter(blob)
-			.filter_map(Instruction::from_capture)
-			.collect()
+		helpers::parse::through_regex(blob, &REGEX, Instruction::from_capture)
 	}
 
 	pub fn parse_many(blob: &str) -> Vec<Self> {
