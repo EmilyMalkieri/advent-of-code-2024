@@ -35,7 +35,7 @@ fn calculate_similarity_score(left: &[u32], right: &[u32]) -> u32 {
 
 #[allow(dead_code)]
 pub fn solve_1() -> u32 {
-	let input = helpers::read_input("inputs/day01/input.txt").unwrap();
+	let input = helpers::read::to_lines("inputs/day01/input.txt");
 	let (mut left, mut right) = helpers::split_left_right(input);
 	left.sort();
 	right.sort();
@@ -44,7 +44,7 @@ pub fn solve_1() -> u32 {
 
 #[allow(dead_code)]
 pub fn solve_2() -> u32 {
-	let input = helpers::read_input("inputs/day01/input.txt").unwrap();
+	let input = helpers::read::to_lines("inputs/day01/input.txt");
 	let (left, right) = helpers::split_left_right(input);
 	calculate_similarity_score(&left, &right)
 }
@@ -58,7 +58,7 @@ mod tests {
 
 	#[test]
 	fn ex01() {
-		let input = helpers::read_input("inputs/day01/ex01.txt").unwrap();
+		let input = helpers::read::to_lines("inputs/day01/ex01.txt");
 		let (mut left, mut right) = helpers::split_left_right(input);
 		left.sort();
 		right.sort();
@@ -69,7 +69,7 @@ mod tests {
 
 	#[test]
 	fn ex02() {
-		let input = helpers::read_input("inputs/day01/ex01.txt").unwrap();
+		let input = helpers::read::to_lines("inputs/day01/ex01.txt");
 		let (left, right) = helpers::split_left_right(input);
 		assert_eq!(31, calculate_similarity_score(&left, &right));
 	}

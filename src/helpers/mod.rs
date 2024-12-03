@@ -1,15 +1,12 @@
 use std::{
 	fs::File,
-	io::{self, BufRead, BufReader},
+	io::{self, BufReader},
 	num::ParseIntError,
-	path::Path,
 };
 
-/// Read in our input file
-pub fn read_input<P: AsRef<Path>>(path: P) -> io::Result<io::Lines<BufReader<File>>> {
-	let file = File::open(&path)?;
-	Ok(BufReader::new(file).lines())
-}
+pub mod parse;
+pub mod parse_each_line;
+pub mod read;
 
 /// Split our input line-by-line into two lists, separated by whitespace.
 pub fn split_left_right(input: io::Lines<BufReader<File>>) -> (Vec<u32>, Vec<u32>) {
@@ -36,23 +33,4 @@ fn left_right(line: &str) -> Result<Option<(u32, u32)>, ParseIntError> {
 	} else {
 		return Ok(None);
 	}
-}
-
-/// Parse a line into a list of numbers, separated by whitespace.
-fn line_to_nums(line: &str) -> Result<Vec<u32>, ParseIntError> {
-	line
-		.split_whitespace()
-		.map(|s| u32::from_str_radix(s, 10))
-		.collect()
-}
-
-/// Parse our input line-by-line into one type per line, with intermediate &[u32] parsing
-pub fn read_and_parse_each_lines_nums_into<P: AsRef<Path>, T: for<'a> From<&'a [u32]>>(
-	path: P,
-) -> Vec<T> {
-	read_input(path)
-		.unwrap()
-		.map(|line| line_to_nums(&line.unwrap()))
-		.map(|nums| T::from(&nums.unwrap()))
-		.collect()
 }
