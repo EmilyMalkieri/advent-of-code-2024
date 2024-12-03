@@ -16,6 +16,14 @@ where
 	BufReader::new(file).lines()
 }
 
+/// Read in our input file as just one blob
+pub fn to_string<P: AsRef<Path>>(path: P) -> String
+where
+	P: Display,
+{
+	std::fs::read_to_string(&path).expect(&format!("Couldn't open or read the file {}", path))
+}
+
 /// Read our input file as individual lines and parse each line into a type, via intermediate conversion into unsigned numbers.
 pub fn and_parse_each_line_into_type<P: AsRef<Path>, T: for<'a> From<&'a [u32]>>(
 	path: P,
