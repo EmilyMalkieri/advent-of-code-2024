@@ -9,9 +9,13 @@ pub fn into_unsigned_nums(input: &str) -> Vec<u32> {
 }
 
 /// Parse our input into multiple instances of a type T as found by a regular expression.
-pub fn through_regex<T, F>(input: &str, regex: &regex::Regex, parser: F) -> Vec<T>
+pub fn through_regex<'s, 'r, T, F>(
+	input: &'s str,
+	regex: &'r regex::Regex,
+	parser: F,
+) -> impl Iterator<Item = T> + use<'s, 'r, T, F>
 where
 	F: Fn(regex::Captures) -> Option<T>,
 {
-	regex.captures_iter(input).filter_map(parser).collect()
+	regex.captures_iter(input).filter_map(parser)
 }

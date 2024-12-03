@@ -57,33 +57,30 @@ impl Instruction {
 		}
 	}
 
-	pub fn parse_many_naively(blob: &str) -> Vec<Self> {
+	pub fn parse_many_naively<'s>(blob: &'s str) -> impl Iterator<Item = Self> + use<'s> {
 		helpers::parse::through_regex(blob, &REGEX, Instruction::from_capture)
 	}
 
-	pub fn parse_many(blob: &str) -> Vec<Self> {
+	pub fn parse_many<'s>(blob: &'s str) -> impl Iterator<Item = Self> + use<'s> {
 		let mut parser = Parser::Enabled;
-		Self::parse_many_naively(blob)
-			.iter()
-			.filter_map(|instruction| match instruction {
-				Instruction::r#do => {
-					parser = Parser::Enabled;
-					Some(Instruction::r#do)
-				}
+		Self::parse_many_naively(blob).filter_map(move |instruction| match instruction {
+			Instruction::r#do => {
+				parser = Parser::Enabled;
+				Some(Instruction::r#do)
+			}
+			//cspell: disable-next-line
+			Instruction::dont => {
+				parser = Parser::Disabled;
 				//cspell: disable-next-line
-				Instruction::dont => {
-					parser = Parser::Disabled;
-					//cspell: disable-next-line
-					Some(Instruction::dont)
+				Some(Instruction::dont)
+			}
+			Instruction::mul(a, b) => {
+				if parser == Parser::Enabled {
+					Some(Instruction::mul(a, b))
+				} else {
+					None
 				}
-				Instruction::mul(a, b) => {
-					if parser == Parser::Enabled {
-						Some(Instruction::mul(*a, *b))
-					} else {
-						None
-					}
-				}
-			})
-			.collect()
+			}
+		})
 	}
 }
