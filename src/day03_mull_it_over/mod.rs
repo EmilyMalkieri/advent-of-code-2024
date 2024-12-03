@@ -1,4 +1,23 @@
+use instruction::Instruction;
+
+use crate::helpers;
+
 mod instruction;
+
+#[allow(dead_code)]
+pub fn solve_1() -> u32 {
+	let memory = helpers::read::to_string("inputs/day03/input.txt");
+	let instructions = Instruction::parse_many(&memory);
+	instructions
+		.iter()
+		.map(|instruction| instruction.execute().expect("Not mul() apparently"))
+		.sum()
+}
+
+#[allow(dead_code)]
+pub fn solve_2() -> usize {
+	todo!()
+}
 
 #[cfg(test)]
 mod tests {
@@ -8,8 +27,6 @@ mod tests {
 	fn ex01() {
 		let memory = helpers::read::to_string("inputs/day03/ex01.txt");
 		let instructions = Instruction::parse_many(&memory);
-		assert!(instructions.is_some());
-		let instructions = instructions.unwrap();
 		let expected = vec![
 			Instruction::mul(2, 4),
 			Instruction::mul(5, 5),

@@ -24,10 +24,10 @@ impl Instruction {
 			u32::from_str_radix(cap.get(2).expect("Regex failed").as_str(), 10).expect("Not a number"),
 		))
 	}
-	pub fn parse_many(blob: &str) -> Option<Vec<Self>> {
+	pub fn parse_many(blob: &str) -> Vec<Self> {
 		DAY03_REGEX
 			.captures_iter(blob)
-			.map(Instruction::from_capture)
+			.filter_map(Instruction::from_capture)
 			.collect()
 	}
 }

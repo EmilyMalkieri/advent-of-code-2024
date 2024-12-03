@@ -8,7 +8,7 @@ mod day03_mull_it_over;
 
 fn main() {
 	println!(
-		"{} of the reports are safe (with dampener on).",
-		day02_red_nosed_reports::solve_2()
+		"All the multiplications add up to {}.",
+		day03_mull_it_over::solve_1()
 	)
 }
