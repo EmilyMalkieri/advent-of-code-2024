@@ -47,9 +47,15 @@ impl Instruction {
 			Some(Instruction::dont)
 		} else if cap.name("mul").is_some() {
 			Some(Instruction::mul(
-				u32::from_str_radix(cap.name("mul_a").expect("Regex failed").as_str(), 10)
+				cap.name("mul_a")
+					.expect("Regex failed")
+					.as_str()
+					.parse::<u32>()
 					.expect("Not a number"),
-				u32::from_str_radix(cap.name("mul_b").expect("Regex failed").as_str(), 10)
+				cap.name("mul_b")
+					.expect("Regex failed")
+					.as_str()
+					.parse::<u32>()
 					.expect("Not a number"),
 			))
 		} else {
@@ -57,11 +63,11 @@ impl Instruction {
 		}
 	}
 
-	pub fn parse_many_naively<'s>(blob: &'s str) -> impl Iterator<Item = Self> + use<'s> {
+	pub fn parse_many_naively(blob: &str) -> impl Iterator<Item = Self> + use<'_> {
 		helpers::parse::through_regex(blob, &REGEX, Instruction::from_capture)
 	}
 
-	pub fn parse_many<'s>(blob: &'s str) -> impl Iterator<Item = Self> + use<'s> {
+	pub fn parse_many(blob: &str) -> impl Iterator<Item = Self> + use<'_> {
 		let mut parser = Parser::Enabled;
 		Self::parse_many_naively(blob).filter_map(move |instruction| match instruction {
 			Instruction::r#do => {

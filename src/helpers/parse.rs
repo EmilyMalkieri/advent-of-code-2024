@@ -2,9 +2,10 @@ use regex;
 
 /// Parse numbers from a string
 pub fn into_unsigned_nums(input: &str) -> impl Iterator<Item = u32> + use<'_> {
-	input
-		.split_whitespace()
-		.map(|s| u32::from_str_radix(s, 10).expect(&format!("Not a number: {}", s)))
+	input.split_whitespace().map(|s| {
+		s.parse::<u32>()
+			.unwrap_or_else(|_| panic!("Not a number: {}", s))
+	})
 }
 
 /// Parse our input into multiple instances of a type T as found by a regular expression.

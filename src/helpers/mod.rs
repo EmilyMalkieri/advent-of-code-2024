@@ -27,10 +27,10 @@ fn left_right(line: &str) -> Result<Option<(u32, u32)>, ParseIntError> {
 	if let Some(first) = it.next()
 		&& let Some(second) = it.next()
 	{
-		let left = u32::from_str_radix(first, 10)?;
-		let right = u32::from_str_radix(second, 10)?;
-		return Ok(Some((left, right)));
+		let left = first.parse::<u32>()?;
+		let right = second.parse::<u32>()?;
+		Ok(Some((left, right)))
 	} else {
-		return Ok(None);
+		Ok(None)
 	}
 }
