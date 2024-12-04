@@ -30,9 +30,9 @@ static REGEX: LazyLock<Regex> = LazyLock::new(|| {
 impl Instruction {
 	pub fn execute(&self) -> Option<u32> {
 		match self {
-			Instruction::mul(a, b) => Some(a * b),
+			&Instruction::mul(a, b) => Some(a * b),
 			//cspell: disable-next-line
-			Instruction::r#do | Instruction::dont => None,
+			&Instruction::r#do | &Instruction::dont => None,
 		}
 	}
 
@@ -79,13 +79,7 @@ impl Instruction {
 				//cspell: disable-next-line
 				Some(Instruction::dont)
 			}
-			Instruction::mul(a, b) => {
-				if parser == Parser::Enabled {
-					Some(Instruction::mul(a, b))
-				} else {
-					None
-				}
-			}
+			Instruction::mul(a, b) => (parser == Parser::Enabled).then_some(Instruction::mul(a, b)),
 		})
 	}
 }

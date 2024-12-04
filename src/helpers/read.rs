@@ -1,7 +1,8 @@
+use core::fmt::Display;
 use std::{
-	fmt::Display,
+	fs,
 	fs::File,
-	io::{self, BufRead, BufReader},
+	io::{self, BufRead as _, BufReader},
 	path::Path,
 };
 
@@ -23,8 +24,7 @@ where
 	P: Display,
 	P: AsRef<Path>,
 {
-	std::fs::read_to_string(&path)
-		.unwrap_or_else(|_| panic!("Couldn't open or read the file {path}"))
+	fs::read_to_string(&path).unwrap_or_else(|_| panic!("Couldn't open or read the file {path}"))
 }
 
 /// Read our input file as individual lines and parse each line into a type, via intermediate conversion into unsigned numbers.

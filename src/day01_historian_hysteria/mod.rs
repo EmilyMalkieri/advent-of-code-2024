@@ -1,4 +1,5 @@
-use std::{collections::HashMap, iter};
+use core::iter;
+use std::collections::HashMap;
 
 use crate::helpers;
 
@@ -17,7 +18,7 @@ fn count_occurrences(list: &[u32], elem: u32) -> u32 {
 		.filter(|&&e| e == elem)
 		.count()
 		.try_into()
-		.unwrap()
+		.expect("Couldn't convert from usize")
 }
 
 /// Calculate the "similarity score" between both lists

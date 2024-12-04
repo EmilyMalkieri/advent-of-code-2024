@@ -1,4 +1,4 @@
-use std::cmp::Ordering;
+use core::cmp::Ordering;
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum Trend {
@@ -21,9 +21,9 @@ impl From<Ordering> for Trend {
 impl Trend {
 	pub fn adjust(&self, direction: Ordering) -> Trend {
 		match (self, direction) {
-			(Trend::StrictlyIncreasing, Ordering::Greater) => Trend::StrictlyIncreasing,
-			(Trend::StrictlyDecreasing, Ordering::Less) => Trend::StrictlyDecreasing,
-			(Trend::Flat, Ordering::Equal) => Trend::Flat,
+			(&Trend::StrictlyIncreasing, Ordering::Greater) => Trend::StrictlyIncreasing,
+			(&Trend::StrictlyDecreasing, Ordering::Less) => Trend::StrictlyDecreasing,
+			(&Trend::Flat, Ordering::Equal) => Trend::Flat,
 			_ => Trend::Mixed,
 		}
 	}

@@ -1,7 +1,7 @@
+use core::num::ParseIntError;
 use std::{
 	fs::File,
 	io::{self, BufReader},
-	num::ParseIntError,
 };
 
 pub mod parse;
@@ -13,7 +13,9 @@ pub fn split_left_right(input: io::Lines<BufReader<File>>) -> (Vec<u32>, Vec<u32
 	let mut left = vec![];
 	let mut right = vec![];
 	for line in input {
-		if let Some((l, r)) = left_right(&line.unwrap()).unwrap() {
+		if let Some((l, r)) =
+			left_right(&line.expect("Couldn't read line")).expect("Couldn't parse these numbers")
+		{
 			left.push(l);
 			right.push(r);
 		};

@@ -30,7 +30,7 @@ mod tests {
 	fn ex01() {
 		let memory = helpers::read::to_string("inputs/day03/ex01.txt");
 		let instructions: Vec<Instruction> = Instruction::parse_many_naively(&memory)
-			.filter(|instruction| matches!(instruction, Instruction::mul(_, _)))
+			.filter(|instruction| matches!(instruction, &Instruction::mul(_, _)))
 			.collect();
 		let expected = vec![
 			Instruction::mul(2, 4),

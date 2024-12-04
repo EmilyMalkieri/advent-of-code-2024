@@ -1,4 +1,11 @@
-#![warn(clippy::pedantic)]
+#![warn(
+	clippy::pedantic,
+	clippy::unused_trait_names,
+	clippy::pattern_type_mismatch,
+	clippy::absolute_paths,
+	clippy::std_instead_of_core,
+	clippy::unwrap_used
+)]
 #![feature(let_chains)]
 
 mod helpers;
