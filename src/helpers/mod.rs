@@ -7,6 +7,7 @@ use std::{
 pub mod parse;
 pub mod parse_each_line;
 pub mod read;
+pub mod types;
 
 /// Split our input line-by-line into two lists, separated by whitespace.
 pub fn split_left_right(input: io::Lines<BufReader<File>>) -> (Vec<u32>, Vec<u32>) {
