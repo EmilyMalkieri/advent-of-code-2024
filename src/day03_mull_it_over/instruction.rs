@@ -31,13 +31,12 @@ impl Instruction {
 	pub fn execute(&self) -> Option<u32> {
 		match self {
 			Instruction::mul(a, b) => Some(a * b),
-			Instruction::r#do => None,
 			//cspell: disable-next-line
-			Instruction::dont => None,
+			Instruction::r#do | Instruction::dont => None,
 		}
 	}
 
-	fn from_capture(cap: regex::Captures) -> Option<Self> {
+	fn from_capture(cap: &regex::Captures) -> Option<Self> {
 		if cap.name("do").is_some() {
 			Some(Instruction::r#do)
 		}
@@ -64,7 +63,7 @@ impl Instruction {
 	}
 
 	pub fn parse_many_naively(blob: &str) -> impl Iterator<Item = Self> + use<'_> {
-		helpers::parse::through_regex(blob, &REGEX, Instruction::from_capture)
+		helpers::parse::through_regex(blob, &REGEX, |cap| Instruction::from_capture(&cap))
 	}
 
 	pub fn parse_many(blob: &str) -> impl Iterator<Item = Self> + use<'_> {

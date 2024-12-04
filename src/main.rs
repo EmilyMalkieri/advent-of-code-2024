@@ -1,3 +1,4 @@
+#![warn(clippy::pedantic)]
 #![feature(let_chains)]
 
 mod helpers;
@@ -10,5 +11,5 @@ fn main() {
 	println!(
 		"All the enabled multiplications add up to {}.",
 		day03_mull_it_over::solve_2()
-	)
+	);
 }

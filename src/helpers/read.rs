@@ -13,7 +13,7 @@ where
 	P: Display,
 	P: AsRef<Path>,
 {
-	let file = File::open(&path).unwrap_or_else(|_| panic!("Couldn't open the file {}", path));
+	let file = File::open(&path).unwrap_or_else(|_| panic!("Couldn't open the file {path}"));
 	BufReader::new(file).lines()
 }
 
@@ -24,7 +24,7 @@ where
 	P: AsRef<Path>,
 {
 	std::fs::read_to_string(&path)
-		.unwrap_or_else(|_| panic!("Couldn't open or read the file {}", path))
+		.unwrap_or_else(|_| panic!("Couldn't open or read the file {path}"))
 }
 
 /// Read our input file as individual lines and parse each line into a type, via intermediate conversion into unsigned numbers.

@@ -51,7 +51,7 @@ impl Report {
 		}
 
 		(0..self.levels.len()).any(|skipped_idx| {
-			let mut levels = self.levels.to_owned();
+			let mut levels = self.levels.clone();
 			levels.remove(skipped_idx);
 			Report::from(levels.as_slice()).is_safe()
 		})

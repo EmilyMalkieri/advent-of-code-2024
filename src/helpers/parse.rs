@@ -4,7 +4,7 @@ use regex;
 pub fn into_unsigned_nums(input: &str) -> impl Iterator<Item = u32> + use<'_> {
 	input.split_whitespace().map(|s| {
 		s.parse::<u32>()
-			.unwrap_or_else(|_| panic!("Not a number: {}", s))
+			.unwrap_or_else(|_| panic!("Not a number: {s}"))
 	})
 }
 

@@ -37,8 +37,8 @@ fn calculate_similarity_score(left: &[u32], right: &[u32]) -> u32 {
 pub fn solve_1() -> u32 {
 	let input = helpers::read::to_lines("inputs/day01/input.txt");
 	let (mut left, mut right) = helpers::split_left_right(input);
-	left.sort();
-	right.sort();
+	left.sort_unstable();
+	right.sort_unstable();
 	total_distance(&left, &right)
 }
 
@@ -60,8 +60,8 @@ mod tests {
 	fn ex01() {
 		let input = helpers::read::to_lines("inputs/day01/ex01.txt");
 		let (mut left, mut right) = helpers::split_left_right(input);
-		left.sort();
-		right.sort();
+		left.sort_unstable();
+		right.sort_unstable();
 		assert_eq!(Some(&1), left.first());
 		assert_eq!(Some(&3), right.first());
 		assert_eq!(11, total_distance(&left, &right));

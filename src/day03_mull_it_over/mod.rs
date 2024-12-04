@@ -47,7 +47,7 @@ mod tests {
 					.expect("Must have gotten the wrong instruction type here"))
 				.sum::<u32>(),
 			161
-		)
+		);
 	}
 
 	#[test]
@@ -65,9 +65,9 @@ mod tests {
 		assert_eq!(
 			instructions
 				.iter()
-				.filter_map(|instruction| instruction.execute())
+				.filter_map(Instruction::execute)
 				.sum::<u32>(),
 			48
-		)
+		);
 	}
 }

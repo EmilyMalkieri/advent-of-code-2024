@@ -22,12 +22,9 @@ impl Trend {
 	pub fn adjust(&self, direction: Ordering) -> Trend {
 		match (self, direction) {
 			(Trend::StrictlyIncreasing, Ordering::Greater) => Trend::StrictlyIncreasing,
-			(Trend::StrictlyIncreasing, _) => Trend::Mixed,
 			(Trend::StrictlyDecreasing, Ordering::Less) => Trend::StrictlyDecreasing,
-			(Trend::StrictlyDecreasing, _) => Trend::Mixed,
 			(Trend::Flat, Ordering::Equal) => Trend::Flat,
-			(Trend::Flat, _) => Trend::Mixed,
-			(Trend::Mixed, _) => Trend::Mixed,
+			_ => Trend::Mixed,
 		}
 	}
 }
