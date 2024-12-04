@@ -1,5 +1,5 @@
 use crate::helpers::read;
-use crate::helpers::types::grid::{self, Direction};
+use crate::helpers::types::grid::{self};
 
 #[allow(dead_code)]
 pub fn solve_1() -> u32 {
@@ -24,7 +24,7 @@ fn count_xmases_at_x(grid: &grid::Grid<String>, pos: grid::Pos) -> u32 {
 	'direction: for dir in grid::Direction::clockwise() {
 		let mut prev_pos = pos;
 		for needle in needles {
-			let curr_pos = prev_pos.get_adjacent(&dir);
+			let curr_pos = prev_pos.get_adjacent(dir);
 			if let Some(value) = grid.get(&curr_pos)
 				&& value == needle
 			{
@@ -64,10 +64,10 @@ fn is_crossed_mas_at_a(grid: &grid::Grid<String>, pos: grid::Pos) -> bool {
 	[diag_falling, diag_rising].iter().all(|current_diag| {
 		let (before, after) = (
 			grid
-				.get(&pos.get_adjacent(&current_diag.0))
+				.get(&pos.get_adjacent(current_diag.0))
 				.map(String::as_str),
 			grid
-				.get(&pos.get_adjacent(&current_diag.1))
+				.get(&pos.get_adjacent(current_diag.1))
 				.map(String::as_str),
 		);
 		matches!(

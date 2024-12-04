@@ -66,8 +66,8 @@ pub struct Pos {
 }
 
 impl Pos {
-	pub fn get_adjacent(&self, direction: &Direction) -> Pos {
-		match *direction {
+	pub fn get_adjacent(&self, direction: Direction) -> Pos {
+		match direction {
 			Direction::Up => Pos {
 				x: self.x,
 				y: self.y - 1,
