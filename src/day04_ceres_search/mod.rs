@@ -1,5 +1,5 @@
 use crate::helpers::read;
-use crate::helpers::types::grid;
+use crate::helpers::types::grid::{self, Direction};
 
 #[allow(dead_code)]
 pub fn solve_1() -> u32 {
@@ -9,10 +9,11 @@ pub fn solve_1() -> u32 {
 
 #[allow(dead_code)]
 pub fn solve_2() -> u32 {
-	todo!()
+	let grid = grid::Grid::from(read::to_lines("inputs/day04/input.txt"));
+	count_all_crossed_masses(&grid)
 }
 
-/// Count number of "XMAS" strings starting at this position, which represents a X.
+/// Count number of "XMAS" strings starting at this position, which represents the X.
 ///
 /// XMAS can be spelled forwards or backwards in diagonal, horizontal, or vertical position.
 ///
@@ -51,10 +52,51 @@ fn count_all_xmases(grid: &grid::Grid<String>) -> u32 {
 		.sum()
 }
 
+/// Count number of crossed "MAS" strings centering at this position, which represents the A.
+///
+/// Each individual MAS can be spelled forwards or backwards.
+///
+/// We assume that we've already verified that `Grid::get(pos)` is `Some("A")`.
+fn is_crossed_mas_at_a(grid: &grid::Grid<String>, pos: grid::Pos) -> bool {
+	let diag_falling = (grid::Direction::UpLeft, grid::Direction::DownRight);
+	let diag_rising = (grid::Direction::DownLeft, grid::Direction::UpRight);
+
+	[diag_falling, diag_rising].iter().all(|current_diag| {
+		let (before, after) = (
+			grid
+				.get(&pos.get_adjacent(&current_diag.0))
+				.map(String::as_str),
+			grid
+				.get(&pos.get_adjacent(&current_diag.1))
+				.map(String::as_str),
+		);
+		matches!(
+			(before, after),
+			(Some("M"), Some("S")) | (Some("S"), Some("M"))
+		)
+	})
+}
+
+fn count_all_crossed_masses(grid: &grid::Grid<String>) -> u32 {
+	u32::try_from(
+		grid
+			.into_iter()
+			.filter(|pos| {
+				if let Some("A") = grid.get(pos).map(String::as_str) {
+					is_crossed_mas_at_a(grid, *pos)
+				} else {
+					false
+				}
+			})
+			.count(),
+	)
+	.expect("Couldn't convert usize into u32")
+}
+
 #[cfg(test)]
 mod tests {
 
-	use crate::day04_ceres_search::count_all_xmases;
+	use crate::day04_ceres_search::{count_all_crossed_masses, count_all_xmases};
 	use crate::helpers::read;
 	use crate::helpers::types::grid;
 
@@ -77,5 +119,26 @@ mod tests {
 		let grid = grid::Grid::from(read::to_lines("inputs/day04/ex02_dots.txt"));
 		let xmases: u32 = count_all_xmases(&grid);
 		assert_eq!(18, xmases);
+	}
+
+	#[test]
+	fn ex03() {
+		let grid = grid::Grid::from(read::to_lines("inputs/day04/ex03.txt"));
+		let xmases: u32 = count_all_crossed_masses(&grid);
+		assert_eq!(1, xmases);
+	}
+
+	#[test]
+	fn ex04() {
+		let grid = grid::Grid::from(read::to_lines("inputs/day04/ex02.txt"));
+		let xmases: u32 = count_all_crossed_masses(&grid);
+		assert_eq!(9, xmases);
+	}
+
+	#[test]
+	fn ex04_but_with_dots() {
+		let grid = grid::Grid::from(read::to_lines("inputs/day04/ex04.txt"));
+		let xmases: u32 = count_all_crossed_masses(&grid);
+		assert_eq!(9, xmases);
 	}
 }

@@ -19,7 +19,7 @@ mod day04_ceres_search;
 
 fn main() {
 	println!(
-		"XMAS appears {} times in our word search.",
-		day04_ceres_search::solve_1()
+		"The crossed MAS appears {} times in our word search.",
+		day04_ceres_search::solve_2()
 	);
 }
