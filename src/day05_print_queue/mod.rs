@@ -23,9 +23,12 @@ struct Ordering(HashMap<u32, HashSet<u32>>);
 
 impl Ordering {
 	fn depends_on(&self, a: u32, b: u32) -> bool {
-		let direct_dependencies = self.0.get(&a);
-		if let Some(deps) = direct_dependencies {
-			deps.contains(&b) || deps.iter().any(|dep| self.depends_on(*dep, b))
+		if let Some(direct_dependencies) = self.0.get(&a) {
+			direct_dependencies.contains(&b)
+			// Wow! Apparently we don't account for recursive dependencies.
+			// || direct_dependencies
+			// .iter()
+			// .any(|intermediate_dependency| self.depends_on(*intermediate_dependency, b))
 		} else {
 			false
 		}
@@ -33,25 +36,25 @@ impl Ordering {
 
 	fn cmp(&self, a: u32, b: u32) -> Option<cmp::Ordering> {
 		if a == b {
-			// apparently doesn't come up in input
-			Some(cmp::Ordering::Equal)
+			// Some(cmp::Ordering::Equal)
+			unreachable!()
 		} else if self.depends_on(b, a) {
 			Some(cmp::Ordering::Less)
 		} else if self.depends_on(a, b) {
 			Some(cmp::Ordering::Greater)
 		} else {
-			// apparently doesn't come up in input
-			None
+			// None
+			unreachable!()
 		}
 	}
 
 	pub fn allowed_before(&self, a: u32, b: u32) -> bool {
 		if let Some(ord) = self.cmp(a, b) {
-			ord != cmp::Ordering::Greater
+			// ord != cmp::Ordering::Greater
+			ord == cmp::Ordering::Less
 		} else {
-			// this ordering isn't defined so let's allow it
-			// apparently this case doesn't appear in input
-			true
+			// true
+			unreachable!()
 		}
 	}
 }
