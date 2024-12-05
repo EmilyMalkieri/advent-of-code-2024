@@ -1,8 +1,19 @@
 use regex;
 
 /// Parse numbers from a string
-pub fn into_unsigned_nums(input: &str) -> impl Iterator<Item = u32> + use<'_> {
+pub fn into_unsigned_nums_by_whitespace(input: &str) -> impl Iterator<Item = u32> + use<'_> {
 	input.split_whitespace().map(|s| {
+		s.parse::<u32>()
+			.unwrap_or_else(|_| panic!("Not a number: {s}"))
+	})
+}
+
+/// Parse numbers from a string
+pub fn into_unsigned_nums<'data, 'sep>(
+	input: &'data str,
+	sep: &'sep str,
+) -> impl Iterator<Item = u32> + use<'data, 'sep> {
+	input.split(sep).map(|s| {
 		s.parse::<u32>()
 			.unwrap_or_else(|_| panic!("Not a number: {s}"))
 	})

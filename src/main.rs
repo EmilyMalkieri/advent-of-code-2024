@@ -16,10 +16,11 @@ mod day01_historian_hysteria;
 mod day02_red_nosed_reports;
 mod day03_mull_it_over;
 mod day04_ceres_search;
+mod day05_print_queue;
 
 fn main() {
 	println!(
-		"The crossed MAS appears {} times in our word search.",
-		day04_ceres_search::solve_2()
+		"The middle page numbers of all correctly-ordered updates adds up to {}",
+		day05_print_queue::solve_1()
 	);
 }
