@@ -20,7 +20,7 @@ mod day05_print_queue;
 
 fn main() {
 	println!(
-		"The middle page numbers of all correctly-ordered updates adds up to {}",
-		day05_print_queue::solve_1()
+		"The middle page numbers of all updates that we had to sort first adds up to {}",
+		day05_print_queue::solve_2()
 	);
 }

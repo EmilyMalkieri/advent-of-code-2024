@@ -16,7 +16,17 @@ pub fn solve_1() -> u32 {
 
 #[allow(dead_code)]
 pub fn solve_2() -> u32 {
-	todo!()
+	let input = helpers::read::to_string("inputs/day05/input.txt");
+	let (ord, mut updates) = parse(&input);
+	updates.retain_mut(|update| {
+		if update.is_sorted_by(|a, b| ord.allowed_before(*a, *b)) {
+			false
+		} else {
+			update.sort_by(|a, b| ord.cmp(*a, *b).expect("Total ordering"));
+			true
+		}
+	});
+	updates.iter().map(|update| middle_entry(update)).sum()
 }
 
 struct Ordering(HashMap<u32, HashSet<u32>>);
@@ -108,5 +118,27 @@ mod tests {
 			.collect();
 		let expected_middles = vec![61, 53, 29];
 		assert_eq!(expected_middles, middles);
+	}
+
+	#[test]
+	fn ex02() {
+		let input = helpers::read::to_string("inputs/day05/ex01.txt");
+		let (ord, mut updates) = parse(&input);
+		updates.retain_mut(|update| {
+			if update.is_sorted_by(|a, b| ord.allowed_before(*a, *b)) {
+				false
+			} else {
+				update.sort_by(|a, b| ord.cmp(*a, *b).expect("Total ordering"));
+				true
+			}
+		});
+		let expected: Vec<Vec<u32>> = vec![
+			vec![97, 75, 47, 61, 53],
+			vec![61, 29, 13],
+			vec![97, 75, 47, 29, 13],
+		];
+		assert_eq!(updates, expected);
+		let middles: Vec<u32> = updates.iter().map(|u| middle_entry(u)).collect();
+		assert_eq!(middles, vec![47, 29, 47]);
 	}
 }
