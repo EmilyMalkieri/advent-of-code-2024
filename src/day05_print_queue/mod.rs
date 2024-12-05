@@ -35,7 +35,7 @@ impl Ordering {
 	fn depends_on(&self, a: u32, b: u32) -> bool {
 		if let Some(direct_dependencies) = self.0.get(&a) {
 			direct_dependencies.contains(&b)
-			// Wow! Apparently we don't account for recursive dependencies.
+			// Wow! Apparently we don't account for transitive dependencies.
 			// || direct_dependencies
 			// .iter()
 			// .any(|intermediate_dependency| self.depends_on(*intermediate_dependency, b))
