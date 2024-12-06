@@ -1,7 +1,5 @@
-use std::{
-	borrow::ToOwned,
-	io::{BufRead, Lines},
-};
+use core::str::FromStr;
+use std::io::{BufRead, Lines};
 
 use unicode_segmentation::UnicodeSegmentation as _;
 
@@ -39,22 +37,25 @@ impl<T> IntoIterator for &Grid<T> {
 	}
 }
 
-impl<B> From<Lines<B>> for Grid<String>
+impl<B, T> TryFrom<Lines<B>> for Grid<T>
 where
 	B: BufRead,
+	T: FromStr,
 {
-	fn from(value: Lines<B>) -> Self {
-		Grid {
+	type Error = T::Err;
+
+	fn try_from(value: Lines<B>) -> Result<Self, Self::Error> {
+		Ok(Grid {
 			data: value
 				.map(|line| {
 					line
-						.expect("Unable to read line")
+						.expect("Should have been able to read this line")
 						.graphemes(true)
-						.map(ToOwned::to_owned)
-						.collect()
+						.map(|s| T::from_str(s))
+						.collect::<Result<Vec<_>, _>>()
 				})
-				.collect(),
-		}
+				.collect::<Result<Vec<_>, _>>()?,
+		})
 	}
 }
 

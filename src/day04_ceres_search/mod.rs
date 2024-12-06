@@ -3,13 +3,15 @@ use crate::helpers::types::grid::{self};
 
 #[allow(dead_code)]
 pub fn solve_1() -> u32 {
-	let grid = grid::Grid::from(read::to_lines("inputs/day04/input.txt"));
+	let grid = grid::Grid::try_from(read::to_lines("inputs/day04/input.txt"))
+		.expect("Should have been able to construct this grid.");
 	count_all_xmases(&grid)
 }
 
 #[allow(dead_code)]
 pub fn solve_2() -> u32 {
-	let grid = grid::Grid::from(read::to_lines("inputs/day04/input.txt"));
+	let grid = grid::Grid::try_from(read::to_lines("inputs/day04/input.txt"))
+		.expect("Should have been able to construct this grid.");
 	count_all_crossed_masses(&grid)
 }
 
@@ -102,42 +104,48 @@ mod tests {
 
 	#[test]
 	fn ex01() {
-		let grid = grid::Grid::from(read::to_lines("inputs/day04/ex01.txt"));
+		let grid = grid::Grid::try_from(read::to_lines("inputs/day04/ex01.txt"))
+			.expect("Should have been able to construct this grid.");
 		let xmases: u32 = count_all_xmases(&grid);
 		assert_eq!(4, xmases);
 	}
 
 	#[test]
 	fn ex02() {
-		let grid = grid::Grid::from(read::to_lines("inputs/day04/ex02.txt"));
+		let grid = grid::Grid::try_from(read::to_lines("inputs/day04/ex02.txt"))
+			.expect("Should have been able to construct this grid.");
 		let xmases: u32 = count_all_xmases(&grid);
 		assert_eq!(18, xmases);
 	}
 
 	#[test]
 	fn ex02_but_with_dots() {
-		let grid = grid::Grid::from(read::to_lines("inputs/day04/ex02_dots.txt"));
+		let grid = grid::Grid::try_from(read::to_lines("inputs/day04/ex02_dots.txt"))
+			.expect("Should have been able to construct this grid.");
 		let xmases: u32 = count_all_xmases(&grid);
 		assert_eq!(18, xmases);
 	}
 
 	#[test]
 	fn ex03() {
-		let grid = grid::Grid::from(read::to_lines("inputs/day04/ex03.txt"));
+		let grid = grid::Grid::try_from(read::to_lines("inputs/day04/ex03.txt"))
+			.expect("Should have been able to construct this grid.");
 		let xmases: u32 = count_all_crossed_masses(&grid);
 		assert_eq!(1, xmases);
 	}
 
 	#[test]
 	fn ex04() {
-		let grid = grid::Grid::from(read::to_lines("inputs/day04/ex02.txt"));
+		let grid = grid::Grid::try_from(read::to_lines("inputs/day04/ex02.txt"))
+			.expect("Should have been able to construct this grid.");
 		let xmases: u32 = count_all_crossed_masses(&grid);
 		assert_eq!(9, xmases);
 	}
 
 	#[test]
 	fn ex04_but_with_dots() {
-		let grid = grid::Grid::from(read::to_lines("inputs/day04/ex04.txt"));
+		let grid = grid::Grid::try_from(read::to_lines("inputs/day04/ex04.txt"))
+			.expect("Should have been able to construct this grid.");
 		let xmases: u32 = count_all_crossed_masses(&grid);
 		assert_eq!(9, xmases);
 	}
