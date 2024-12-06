@@ -16,13 +16,13 @@ pub fn solve_1() -> usize {
 	trail.into_iter().collect::<HashSet<_>>().len()
 }
 
-/// This runs for a bit! Don't be scared, we take less than a second per line so it's not too bad.
 #[allow(dead_code)]
 pub fn solve_2() -> usize {
 	let map = grid::Grid::<MapObject>::try_from(helpers::read::to_lines("inputs/day06/input.txt"))
 		.expect("Should have been able to parse input");
 	let guard = Walker::locate(&map).expect("Expected a guard.");
-	confuse_the_guard(&guard, &map).len()
+	let original_route = trail_the_guard(&mut guard.clone(), &mut map.clone());
+	confuse_the_guard_optimized(&guard, &map, &original_route).len()
 }
 
 /// Follow the guard as she leaves the map, reporting the route taken.
@@ -45,6 +45,27 @@ fn trail_the_guard(guard: &mut Walker, map: &mut Map) -> Vec<grid::Pos> {
 }
 
 /// Attempt to find positions at which one single added obstacle would send the guard into a patrol loop.
+///
+/// Optimized version for if we know her pre-calculated route without obstacles present.
+fn confuse_the_guard_optimized(
+	guard: &Walker,
+	map: &Map,
+	original_route: &[grid::Pos],
+) -> Vec<grid::Pos> {
+	original_route
+		.iter()
+		.filter(|pos| Some(&MapObject::FreeSpace) == map.get(pos))
+		.filter(|pos| {
+			let mut attempt = map.clone();
+			attempt.replace(pos, MapObject::Obstruction);
+			let mut doppelgänger = *guard;
+			loops(&mut doppelgänger, &mut attempt)
+		})
+		.map(ToOwned::to_owned)
+		.collect()
+}
+/// Attempt to find positions at which one single added obstacle would send the guard into a patrol loop.
+#[allow(dead_code)]
 fn confuse_the_guard(guard: &Walker, map: &Map) -> Vec<grid::Pos> {
 	map.into_iter()
 		.filter(|pos| Some(&MapObject::FreeSpace) == map.get(pos))
@@ -143,7 +164,10 @@ impl Walker {
 mod tests {
 	use std::collections::HashSet;
 
-	use crate::helpers::{self, types::grid};
+	use crate::{
+		day06_guard_gallivant::confuse_the_guard_optimized,
+		helpers::{self, types::grid},
+	};
 
 	use super::{confuse_the_guard, trail_the_guard, MapObject, Walker};
 
@@ -173,5 +197,26 @@ mod tests {
 			grid::Pos(7, 9),
 		];
 		assert_eq!(expected, obstacle_placements);
+	}
+	#[test]
+
+	fn ex02_opt() {
+		let map = grid::Grid::<MapObject>::try_from(helpers::read::to_lines("inputs/day06/ex01.txt"))
+			.expect("Should have been able to parse this grid.");
+		let guard = Walker::locate(&map).expect("Should have found our guard!");
+		let route = trail_the_guard(&mut guard.clone(), &mut map.clone());
+		let obstacle_placements = confuse_the_guard_optimized(&guard, &map, &route);
+		let expected = vec![
+			grid::Pos(3, 6),
+			grid::Pos(6, 7),
+			grid::Pos(7, 7),
+			grid::Pos(1, 8),
+			grid::Pos(3, 8),
+			grid::Pos(7, 9),
+		];
+		assert_eq!(
+			HashSet::<grid::Pos>::from_iter(expected),
+			HashSet::<grid::Pos>::from_iter(obstacle_placements)
+		);
 	}
 }
