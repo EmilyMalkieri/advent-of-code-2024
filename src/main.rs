@@ -17,10 +17,11 @@ mod day02_red_nosed_reports;
 mod day03_mull_it_over;
 mod day04_ceres_search;
 mod day05_print_queue;
+mod day06_guard_gallivant;
 
 fn main() {
 	println!(
-		"The middle page numbers of all updates that we had to sort first adds up to {}",
-		day05_print_queue::solve_2()
+		"The guard visits {} unique locations before she leaves the map.",
+		day06_guard_gallivant::solve_1()
 	);
 }

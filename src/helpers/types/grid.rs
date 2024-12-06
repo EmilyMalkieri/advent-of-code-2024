@@ -5,20 +5,54 @@ use unicode_segmentation::UnicodeSegmentation as _;
 
 /// A 2d grid.
 ///
-/// `T` shouldn't be an Option or you won't be able to tell the difference between `get` returning None because the position is invalid or `get` returning None because you've set that field to None.
-///
 /// Rows don't necessarily have to have the same number of columns.
 #[derive(Debug)]
 pub struct Grid<T> {
 	data: Vec<Vec<T>>,
 }
 
-impl<T> Grid<T> {
+impl<T> Grid<T>
+where
+	T: Clone,
+{
 	/// Get the value at the position, if it exists.
 	pub fn get(&self, pos: &Pos) -> Option<&T> {
 		let row_idx = usize::try_from(pos.y).ok()?;
 		let col_idx = usize::try_from(pos.x).ok()?;
 		self.data.get(row_idx).and_then(|row| row.get(col_idx))
+	}
+
+	/// Swaps the given value with the current value at the position, if it exists.
+	///
+	/// Returns the previous value at the position.
+	/// No operation takes place if the previous position was not set.
+	pub fn replace(&mut self, pos: &Pos, val: T) -> Option<T> {
+		let row_idx = usize::try_from(pos.y).ok()?;
+		let col_idx = usize::try_from(pos.x).ok()?;
+		if let Some(current) = self
+			.data
+			.get_mut(row_idx)
+			.and_then(|row| row.get_mut(col_idx))
+		{
+			let prev = current.clone();
+			*current = val;
+			Some(prev)
+		} else {
+			None
+		}
+	}
+
+	/// Swap the values at two positions, if they exist.
+	pub fn swap(&mut self, a: &Pos, b: &Pos) -> bool {
+		if let Some(a_val) = self.get(a).cloned()
+			&& let Some(b_val) = self.get(b).cloned()
+		{
+			self.replace(a, b_val);
+			self.replace(b, a_val);
+			true
+		} else {
+			false
+		}
 	}
 }
 
@@ -60,7 +94,7 @@ where
 }
 
 /// An arbitrary 2d position that isn't bound checked to any grid.
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 pub struct Pos {
 	x: isize,
 	y: isize,
@@ -129,5 +163,18 @@ impl Direction {
 			Direction::Left,
 			Direction::UpLeft,
 		]
+	}
+
+	pub fn turn_clockwise_90deg(self) -> Self {
+		match self {
+			Direction::Up => Direction::Right,
+			Direction::Down => Direction::Left,
+			Direction::Left => Direction::Up,
+			Direction::Right => Direction::Down,
+			Direction::UpLeft => Direction::UpRight,
+			Direction::UpRight => Direction::DownRight,
+			Direction::DownLeft => Direction::UpLeft,
+			Direction::DownRight => Direction::DownLeft,
+		}
 	}
 }
