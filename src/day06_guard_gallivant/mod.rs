@@ -85,10 +85,9 @@ fn loops(guard: &mut Walker, map: &mut Map) -> bool {
 	while let action = guard.walk(map)
 		&& action != Action::EscapeToFreedom
 	{
-		if history.contains(guard) {
+		if !history.insert(*guard) {
 			return true;
 		}
-		history.insert(*guard);
 	}
 	false
 }
