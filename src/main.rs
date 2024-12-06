@@ -21,7 +21,7 @@ mod day06_guard_gallivant;
 
 fn main() {
 	println!(
-		"The guard visits {} unique locations before she leaves the map.",
-		day06_guard_gallivant::solve_1()
+		"There's {} different places we could place an obstacle for a loop.",
+		day06_guard_gallivant::solve_2()
 	);
 }

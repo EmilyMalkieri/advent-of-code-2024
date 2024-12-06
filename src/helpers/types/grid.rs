@@ -6,7 +6,7 @@ use unicode_segmentation::UnicodeSegmentation as _;
 /// A 2d grid.
 ///
 /// Rows don't necessarily have to have the same number of columns.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Grid<T> {
 	data: Vec<Vec<T>>,
 }
@@ -100,6 +100,11 @@ pub struct Pos {
 	y: isize,
 }
 
+#[allow(non_snake_case, dead_code)]
+pub fn Pos(x: isize, y: isize) -> Pos {
+	Pos { x, y }
+}
+
 impl Pos {
 	pub fn get_adjacent(&self, direction: Direction) -> Pos {
 		match direction {
@@ -139,7 +144,7 @@ impl Pos {
 	}
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 pub enum Direction {
 	Up,
 	Down,
