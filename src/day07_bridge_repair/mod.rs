@@ -21,7 +21,7 @@ pub fn solve_2() -> Num {
 		helpers::read::to_lines("inputs/day07/input.txt"),
 		Equation::from,
 	);
-	let ops = vec![Operator::Add, Operator::Multiply, Operator::Concatenation];
+	let ops = vec![Operator::Add, Operator::Multiply, Operator::Concatenate];
 	lines
 		.filter(|eq| eq.is_solvable(&ops))
 		.map(|eq| eq.result)
@@ -32,7 +32,7 @@ pub fn solve_2() -> Num {
 enum Operator {
 	Add,
 	Multiply,
-	Concatenation,
+	Concatenate,
 }
 
 impl Operator {
@@ -40,7 +40,7 @@ impl Operator {
 		match self {
 			Operator::Add => a + b,
 			Operator::Multiply => a * b,
-			Operator::Concatenation => {
+			Operator::Concatenate => {
 				let mut cc = a.to_string();
 				cc.push_str(&b.to_string());
 				cc.parse::<Num>()
@@ -113,7 +113,7 @@ mod tests {
 			helpers::read::to_lines("inputs/day07/ex01.txt"),
 			Equation::from,
 		);
-		let ops = vec![Operator::Add, Operator::Multiply, Operator::Concatenation];
+		let ops = vec![Operator::Add, Operator::Multiply, Operator::Concatenate];
 		let sum = lines
 			.filter(|eq| eq.is_solvable(&ops))
 			.map(|eq| eq.result)
