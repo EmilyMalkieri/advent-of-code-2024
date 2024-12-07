@@ -18,10 +18,11 @@ mod day03_mull_it_over;
 mod day04_ceres_search;
 mod day05_print_queue;
 mod day06_guard_gallivant;
+mod day07_bridge_repair;
 
 fn main() {
 	println!(
-		"There's {} different places we could place an obstacle for a loop.",
-		day06_guard_gallivant::solve_2()
+		"The valid equations sum up to {}",
+		day07_bridge_repair::solve_1()
 	);
 }

@@ -4,5 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+itertools = "0.13.0"
+num = "0.4.3"
 regex = { version = "1.11", features = ["std"] }
 unicode-segmentation = "1.12.0"

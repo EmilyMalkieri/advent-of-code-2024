@@ -1,9 +1,15 @@
+use core::str::FromStr;
+
+use num;
 use regex;
 
 /// Parse numbers from a string
-pub fn into_unsigned_nums_by_whitespace(input: &str) -> impl Iterator<Item = u32> + use<'_> {
+pub fn into_unsigned_nums_by_whitespace<N>(input: &str) -> impl Iterator<Item = N> + use<'_, N>
+where
+	N: num::Unsigned + FromStr,
+{
 	input.split_whitespace().map(|s| {
-		s.parse::<u32>()
+		s.parse::<N>()
 			.unwrap_or_else(|_| panic!("Not a number: {s}"))
 	})
 }

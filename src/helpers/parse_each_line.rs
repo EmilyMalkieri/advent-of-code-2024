@@ -15,3 +15,11 @@ pub fn into_type<T: for<'a> From<&'a [u32]>, L: BufRead>(
 ) -> impl Iterator<Item = T> {
 	into_unsigned_nums(lines).map(|line| T::from(&line))
 }
+
+pub fn by<B, F, T>(lines: Lines<B>, func: F) -> impl Iterator<Item = T>
+where
+	B: BufRead,
+	F: Fn(String) -> T,
+{
+	lines.map(move |line| func(line.expect("Should have been able to read this line.")))
+}
