@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use crate::helpers;
 
 type Num = u64;
@@ -8,9 +10,9 @@ pub fn solve_1() -> Num {
 		helpers::read::to_lines("inputs/day07/input.txt"),
 		Equation::from,
 	);
-	let ops = vec![Operator::Add, Operator::Multiply];
+	let ops = HashSet::from_iter([Operator::Add, Operator::Multiply]);
 	lines
-		.filter(|eq| eq.is_solvable(&ops))
+		.filter(|eq| eq.is_solvable(&ops.clone()))
 		.map(|eq| eq.result)
 		.sum()
 }
@@ -21,14 +23,14 @@ pub fn solve_2() -> Num {
 		helpers::read::to_lines("inputs/day07/input.txt"),
 		Equation::from,
 	);
-	let ops = vec![Operator::Add, Operator::Multiply, Operator::Concatenate];
+	let ops = HashSet::from_iter([Operator::Add, Operator::Multiply, Operator::Concatenate]);
 	lines
-		.filter(|eq| eq.is_solvable(&ops))
+		.filter(|eq| eq.is_solvable(&ops.clone()))
 		.map(|eq| eq.result)
 		.sum()
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 enum Operator {
 	Add,
 	Multiply,
@@ -57,11 +59,11 @@ struct Equation {
 }
 
 impl Equation {
-	pub fn is_solvable(&self, ops: &[Operator]) -> bool {
-		if self.nums.is_empty() {
-			false
-		} else {
-			helpers::iter::permutations(&ops, self.nums.len() - 1).any(|p| {
+	pub fn is_solvable(&self, allowed_operators: &HashSet<Operator>) -> bool {
+		match self.nums.len() {
+			0 => false,
+			1 => Some(&self.result) == self.nums.first(),
+			len => helpers::iter::permutations(&allowed_operators.iter(), len - 1).any(|p| {
 				let mut ops = p.iter();
 				let nums = self.nums.clone().into_iter();
 				Some(self.result)
@@ -70,7 +72,7 @@ impl Equation {
 							.expect("We literally created this with the correct number of elements")
 							.calc(acc, curr)
 					})
-			})
+			}),
 		}
 	}
 }
@@ -88,6 +90,8 @@ impl From<String> for Equation {
 
 #[cfg(test)]
 mod tests {
+	use std::collections::HashSet;
+
 	use super::Equation;
 	use super::Num;
 	use crate::{day07_bridge_repair::Operator, helpers};
@@ -98,9 +102,9 @@ mod tests {
 			helpers::read::to_lines("inputs/day07/ex01.txt"),
 			Equation::from,
 		);
-		let ops = vec![Operator::Add, Operator::Multiply];
+		let ops = HashSet::from_iter([Operator::Add, Operator::Multiply]);
 		let sum = lines
-			.filter(|eq| eq.is_solvable(&ops))
+			.filter(|eq| eq.is_solvable(&ops.clone()))
 			.map(|eq| eq.result)
 			.sum();
 		let expected: Num = 3749;
@@ -113,9 +117,9 @@ mod tests {
 			helpers::read::to_lines("inputs/day07/ex01.txt"),
 			Equation::from,
 		);
-		let ops = vec![Operator::Add, Operator::Multiply, Operator::Concatenate];
+		let ops = HashSet::from_iter([Operator::Add, Operator::Multiply, Operator::Concatenate]);
 		let sum = lines
-			.filter(|eq| eq.is_solvable(&ops))
+			.filter(|eq| eq.is_solvable(&ops.clone()))
 			.map(|eq| eq.result)
 			.sum();
 		let expected: Num = 11387;
