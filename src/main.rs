@@ -23,6 +23,6 @@ mod day07_bridge_repair;
 fn main() {
 	println!(
 		"The valid equations sum up to {}",
-		day07_bridge_repair::solve_1()
+		day07_bridge_repair::solve_2()
 	);
 }

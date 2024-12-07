@@ -17,13 +17,22 @@ pub fn solve_1() -> Num {
 
 #[allow(dead_code)]
 pub fn solve_2() -> Num {
-	todo!()
+	let lines = helpers::parse_each_line::by(
+		helpers::read::to_lines("inputs/day07/input.txt"),
+		Equation::from,
+	);
+	let ops = vec![Operator::Add, Operator::Multiply, Operator::Concatenation];
+	lines
+		.filter(|eq| eq.is_solvable(&ops))
+		.map(|eq| eq.result)
+		.sum()
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 enum Operator {
 	Add,
 	Multiply,
+	Concatenation,
 }
 
 impl Operator {
@@ -31,6 +40,12 @@ impl Operator {
 		match self {
 			Operator::Add => a + b,
 			Operator::Multiply => a * b,
+			Operator::Concatenation => {
+				let mut cc = a.to_string();
+				cc.push_str(&b.to_string());
+				cc.parse::<Num>()
+					.expect("Unable to parse concatenated number")
+			}
 		}
 	}
 }
@@ -89,6 +104,21 @@ mod tests {
 			.map(|eq| eq.result)
 			.sum();
 		let expected: Num = 3749;
+		assert_eq!(expected, sum);
+	}
+
+	#[test]
+	fn ex01_concat() {
+		let lines = helpers::parse_each_line::by(
+			helpers::read::to_lines("inputs/day07/ex01.txt"),
+			Equation::from,
+		);
+		let ops = vec![Operator::Add, Operator::Multiply, Operator::Concatenation];
+		let sum = lines
+			.filter(|eq| eq.is_solvable(&ops))
+			.map(|eq| eq.result)
+			.sum();
+		let expected: Num = 11387;
 		assert_eq!(expected, sum);
 	}
 }
