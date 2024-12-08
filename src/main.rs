@@ -19,10 +19,11 @@ mod day04_ceres_search;
 mod day05_print_queue;
 mod day06_guard_gallivant;
 mod day07_bridge_repair;
+mod day08_resonant_collinearity;
 
 fn main() {
 	println!(
-		"The valid equations sum up to {}",
-		day07_bridge_repair::solve_2()
+		"There are {} unique antinode locations within the bounds of this map.",
+		day08_resonant_collinearity::solve_1()
 	);
 }

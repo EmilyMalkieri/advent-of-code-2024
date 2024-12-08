@@ -1,5 +1,6 @@
 use crate::helpers::read;
-use crate::helpers::types::grid::{self};
+use crate::helpers::types::direction;
+use crate::helpers::types::grid;
 
 #[allow(dead_code)]
 pub fn solve_1() -> u32 {
@@ -23,7 +24,7 @@ pub fn solve_2() -> u32 {
 fn count_xmases_at_x(grid: &grid::Grid<String>, pos: grid::Pos) -> u32 {
 	let mut celebrations = 0;
 	let needles = ["M", "A", "S"];
-	'direction: for dir in grid::Direction::clockwise() {
+	'direction: for dir in direction::Direction::clockwise() {
 		let mut prev_pos = pos;
 		for needle in needles {
 			let curr_pos = prev_pos.get_adjacent(dir);
@@ -60,8 +61,14 @@ fn count_all_xmases(grid: &grid::Grid<String>) -> u32 {
 ///
 /// We assume that we've already verified that `Grid::get(pos)` is `Some("A")`.
 fn is_crossed_mas_at_a(grid: &grid::Grid<String>, pos: grid::Pos) -> bool {
-	let diag_falling = (grid::Direction::UpLeft, grid::Direction::DownRight);
-	let diag_rising = (grid::Direction::DownLeft, grid::Direction::UpRight);
+	let diag_falling = (
+		direction::Direction::UpLeft,
+		direction::Direction::DownRight,
+	);
+	let diag_rising = (
+		direction::Direction::DownLeft,
+		direction::Direction::UpRight,
+	);
 
 	[diag_falling, diag_rising].iter().all(|current_diag| {
 		let (before, after) = (

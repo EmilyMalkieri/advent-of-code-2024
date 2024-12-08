@@ -6,6 +6,7 @@ use std::{
 
 pub mod iter;
 pub mod parse;
+pub mod parse_each_char;
 pub mod parse_each_line;
 pub mod read;
 pub mod types;

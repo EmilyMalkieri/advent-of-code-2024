@@ -3,7 +3,7 @@ use std::collections::HashSet;
 
 use crate::helpers::{
 	self,
-	types::grid::{self},
+	types::{direction, grid},
 };
 
 #[allow(dead_code)]
@@ -116,14 +116,14 @@ type Map = grid::Grid<MapObject>;
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 struct Walker {
 	pos: grid::Pos,
-	dir: grid::Direction,
+	dir: direction::Direction,
 }
 
 #[derive(Debug, PartialEq, Eq)]
 enum Action {
 	EscapeToFreedom,
 	MoveAhead(grid::Pos),
-	Turn(grid::Direction),
+	Turn(direction::Direction),
 }
 
 impl Walker {
@@ -132,7 +132,7 @@ impl Walker {
 			.find(|pos| Some(&MapObject::Guard) == map.get(pos))
 			.map(|pos| Walker {
 				pos,
-				dir: grid::Direction::Up,
+				dir: direction::Direction::Up,
 			})
 	}
 
