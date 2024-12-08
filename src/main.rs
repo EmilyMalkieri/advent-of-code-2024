@@ -23,7 +23,7 @@ mod day08_resonant_collinearity;
 
 fn main() {
 	println!(
-		"There are {} unique antinode locations within the bounds of this map.",
-		day08_resonant_collinearity::solve_1()
+		"Accounting for harmonics, there are {} unique antinode locations within the bounds of this map.",
+		day08_resonant_collinearity::solve_2()
 	);
 }
