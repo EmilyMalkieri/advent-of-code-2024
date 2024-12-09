@@ -24,7 +24,7 @@ mod day09_disk_fragmenter;
 
 fn main() {
 	println!(
-		"After fragmenting, the filesystem's checksum is {}",
-		day09_disk_fragmenter::solve_1()
+		"After moving but without fragmenting, the filesystem's checksum is {}",
+		day09_disk_fragmenter::solve_2()
 	);
 }
