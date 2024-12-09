@@ -87,32 +87,36 @@ fn fragment(disk: &mut [DiskEntry]) {
 
 fn move_without_fragmenting(disk: &mut Vec<(DiskEntry, usize)>) {
 	let mut back_idx = max(0, disk.len() - 1);
-	#[allow(clippy::pattern_type_mismatch)]
 	while 0 < back_idx {
-		while back_idx > 0
-			&& let Some((DiskEntry::Free, _)) = disk.get(back_idx)
+		match *disk
+			.get(back_idx)
+			.expect("We literally define this as a valid index.")
 		{
-			back_idx -= 1;
-		}
-		if let Some((DiskEntry::FilePart(id), width)) = disk.get(back_idx) {
-			if let Some((front_idx, (_, space_available))) = disk
-				.iter()
-				.find_position(|(kind, size)| *kind == DiskEntry::Free && size >= width)
-				&& front_idx < back_idx
-			{
-				if space_available == width {
-					disk.swap(front_idx, back_idx);
-					back_idx -= 1;
-				} else {
-					disk
-						.get(front_idx)
-						.replace(&(DiskEntry::FilePart(*id), *width));
-					disk.get(back_idx).replace(&(DiskEntry::Free, *width));
-					disk.insert(front_idx + 1, (DiskEntry::Free, space_available - width));
-					// we don't decrement back_idx here because we inserted an element, so effectively we've decremented it
-				}
-			} else {
+			(DiskEntry::Free, _) => {
 				back_idx -= 1;
+			}
+			(DiskEntry::FilePart(_), file_size) => {
+				if let Some((front_idx, &(DiskEntry::Free, space))) = disk
+					.iter()
+					.find_position(|&&(kind, space)| kind == DiskEntry::Free && space >= file_size)
+					&& front_idx < back_idx
+				{
+					let space_used = file_size;
+					let space_available = space;
+					if space_available == space_used {
+						disk.swap(front_idx, back_idx);
+					} else {
+						let space_left_over = space_available - space_used;
+						disk
+							.get_mut(front_idx)
+							.expect("We know this exists, we just saw it")
+							.1 = space_used;
+						disk.swap(front_idx, back_idx);
+						disk.insert(front_idx + 1, (DiskEntry::Free, space_left_over));
+					}
+				} else if back_idx >= 1 {
+					back_idx -= 1;
+				}
 			}
 		}
 	}
