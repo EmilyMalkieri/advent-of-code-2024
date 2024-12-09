@@ -20,10 +20,11 @@ mod day05_print_queue;
 mod day06_guard_gallivant;
 mod day07_bridge_repair;
 mod day08_resonant_collinearity;
+mod day09_disk_fragmenter;
 
 fn main() {
 	println!(
-		"Accounting for harmonics, there are {} unique antinode locations within the bounds of this map.",
-		day08_resonant_collinearity::solve_2()
+		"After fragmenting, the filesystem's checksum is {}",
+		day09_disk_fragmenter::solve_1()
 	);
 }

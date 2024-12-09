@@ -16,3 +16,16 @@ where
 		.map(|(s, row_idx, col_idx)| func(s, row_idx, col_idx))
 		.collect()
 }
+
+pub fn non_indexed<F, T>(input: &str, func: F) -> Vec<T>
+where
+	F: Fn(&str) -> T,
+{
+	zero_indexed(input, |s, _, _| func(s))
+}
+
+pub fn into_digits(input: &str) -> Vec<u8> {
+	non_indexed(input.trim(), |s| {
+		s.parse::<u8>().expect("Should have been a digit.")
+	})
+}
