@@ -114,7 +114,7 @@ fn move_without_fragmenting(disk: &mut Vec<(DiskEntry, usize)>) {
 						disk.swap(front_idx, back_idx);
 						disk.insert(front_idx + 1, (DiskEntry::Free, space_left_over));
 					}
-				} else if back_idx >= 1 {
+				} else {
 					back_idx -= 1;
 				}
 			}
