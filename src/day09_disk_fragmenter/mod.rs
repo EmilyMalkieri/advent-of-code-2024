@@ -111,6 +111,8 @@ fn move_without_fragmenting(disk: &mut Vec<(DiskEntry, usize)>) {
 					disk.insert(front_idx + 1, (DiskEntry::Free, space_available - width));
 					// we don't decrement back_idx here because we inserted an element, so effectively we've decremented it
 				}
+			} else {
+				back_idx -= 1;
 			}
 		}
 	}
