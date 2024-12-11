@@ -4,6 +4,8 @@
 		"fragmenter",
 		"itertools",
 		"nums",
+		"trailhead",
+		"trailheads",
 		"watchexec"
 	],
 	"cSpell.ignorePaths": [

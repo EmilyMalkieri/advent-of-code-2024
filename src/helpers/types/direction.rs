@@ -11,6 +11,28 @@ pub enum Direction {
 }
 
 impl Direction {
+	pub fn reverse(self) -> Self {
+		match self {
+			Direction::Up => Direction::Down,
+			Direction::Down => Direction::Up,
+			Direction::Left => Direction::Right,
+			Direction::Right => Direction::Left,
+			Direction::UpLeft => Direction::DownRight,
+			Direction::UpRight => Direction::DownLeft,
+			Direction::DownLeft => Direction::UpRight,
+			Direction::DownRight => Direction::UpLeft,
+		}
+	}
+
+	pub fn clockwise_90deg() -> [Self; 4] {
+		[
+			Direction::Up,
+			Direction::Right,
+			Direction::Down,
+			Direction::Left,
+		]
+	}
+
 	pub fn clockwise() -> Vec<Self> {
 		vec![
 			Direction::Up,

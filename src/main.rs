@@ -21,10 +21,11 @@ mod day06_guard_gallivant;
 mod day07_bridge_repair;
 mod day08_resonant_collinearity;
 mod day09_disk_fragmenter;
+mod day10_hoof_it;
 
 fn main() {
 	println!(
-		"After moving but without fragmenting, the filesystem's checksum is {}",
-		day09_disk_fragmenter::solve_2()
+		"The map contains {} worth of trailheads.",
+		day10_hoof_it::solve_1()
 	);
 }
