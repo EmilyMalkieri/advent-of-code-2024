@@ -25,7 +25,7 @@ mod day10_hoof_it;
 
 fn main() {
 	println!(
-		"The map contains {} worth of trailheads.",
-		day10_hoof_it::solve_1()
+		"The map contains {} unique trails.",
+		day10_hoof_it::solve_2()
 	);
 }
