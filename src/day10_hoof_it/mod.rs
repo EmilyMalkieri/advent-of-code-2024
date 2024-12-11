@@ -107,7 +107,7 @@ fn find_trails(pos: Pos, map: &Map, from: Direction, the_trail_so_far: Vec<Pos>)
 
 #[cfg(test)]
 mod tests {
-	use super::{calculate_trailhead, Map, Trailhead};
+	use super::{calculate_trailhead, Map};
 	use crate::helpers;
 
 	#[test]
