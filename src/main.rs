@@ -22,10 +22,11 @@ mod day07_bridge_repair;
 mod day08_resonant_collinearity;
 mod day09_disk_fragmenter;
 mod day10_hoof_it;
+mod day11_plutonian_pebbles;
 
 fn main() {
 	println!(
-		"The map contains {} unique trails.",
-		day10_hoof_it::solve_2()
+		"We've got {} stones after 25 blinks.",
+		day11_plutonian_pebbles::solve_1()
 	);
 }
