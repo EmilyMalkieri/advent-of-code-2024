@@ -26,7 +26,7 @@ mod day11_plutonian_pebbles;
 
 fn main() {
 	println!(
-		"We've got {} stones after 25 blinks.",
-		day11_plutonian_pebbles::solve_1()
+		"We've got {} stones after 75 blinks.",
+		day11_plutonian_pebbles::solve_2()
 	);
 }
