@@ -27,7 +27,7 @@ mod day12_garden_groups;
 
 fn main() {
 	println!(
-		"We need to spend {} for all fences.",
-		day12_garden_groups::solve_1()
+		"We need to spend {} for all fences (bulk discount!!!).",
+		day12_garden_groups::solve_2()
 	);
 }
