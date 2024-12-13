@@ -23,10 +23,11 @@ mod day08_resonant_collinearity;
 mod day09_disk_fragmenter;
 mod day10_hoof_it;
 mod day11_plutonian_pebbles;
+mod day12_garden_groups;
 
 fn main() {
 	println!(
-		"We've got {} stones after 75 blinks.",
-		day11_plutonian_pebbles::solve_2()
+		"We need to spend {} for all fences.",
+		day12_garden_groups::solve_1()
 	);
 }

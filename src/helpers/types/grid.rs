@@ -1,5 +1,9 @@
+use core::hash::Hash;
 use core::str::FromStr;
-use std::io::{BufRead, Lines};
+use std::{
+	collections::{HashMap, HashSet},
+	io::{BufRead, Lines},
+};
 
 use unicode_segmentation::UnicodeSegmentation as _;
 
@@ -55,6 +59,76 @@ where
 		} else {
 			false
 		}
+	}
+}
+impl<T> Grid<T>
+where
+	T: Clone + Eq + Hash,
+{
+	/// Group positions by equal value, but only if they're adjacent to each other in any of the directions supplied.
+	pub fn group_by_adjacent_values(
+		&self,
+		allowed_directions: &[Direction],
+	) -> HashMap<(T, usize), HashSet<Pos>> {
+		// Typically won't matter but if someone passes in a weird set of directions, like "only adjacent to the right or to the bottom right", we need to flip these to the left or top left so that when we compare our latter positions to earlier ones we get the correct matches.
+		let directions: Vec<_> = allowed_directions.iter().map(|dir| dir.reverse()).collect();
+
+		let mut groups: HashMap<(T, usize), HashSet<Pos>> = HashMap::new();
+		let mut group_uniqueness_counter: HashMap<T, usize> = HashMap::new();
+
+		self.into_iter().for_each(|pos| {
+			let val = self
+				.get(&pos)
+				.expect("Can only be a valid position, we're iterating over it.");
+			let groups_with_this_val: usize = *group_uniqueness_counter.get(val).unwrap_or(&0);
+			let adjacents: Vec<_> = directions
+				.iter()
+				.map(|dir| pos.get_adjacent(*dir))
+				.collect();
+			let matching_groups: Vec<_> = (1..=groups_with_this_val)
+				.filter(|id| {
+					if let Some(group) = groups.get(&(val.clone(), *id)) {
+						adjacents.iter().any(|adj| group.contains(adj))
+					} else {
+						false
+					}
+				})
+				.collect();
+			match matching_groups.len() {
+				0 => {
+					groups.insert(
+						(val.clone(), groups_with_this_val + 1),
+						HashSet::from_iter([pos]),
+					);
+					group_uniqueness_counter
+						.entry(val.clone())
+						.and_modify(|c| *c += 1)
+						.or_insert(1);
+				}
+				1 => {
+					let id = matching_groups[0];
+					groups.entry((val.clone(), id)).and_modify(|group| {
+						group.insert(pos);
+					});
+				}
+				_more => {
+					let merge_in = matching_groups
+						.iter()
+						.skip(1)
+						.filter_map(|id| groups.remove(&(val.clone(), *id)))
+						.flatten()
+						.collect::<HashSet<_>>();
+					groups
+						.entry((val.clone(), matching_groups[0]))
+						.and_modify(|group| {
+							group.insert(pos);
+							group.extend(merge_in);
+						});
+				}
+			}
+		});
+
+		groups
 	}
 }
 
